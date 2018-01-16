@@ -118,10 +118,14 @@ def submit():
 
         host = config.get('mail', 'host')
         admin = config.get('mail', 'admin')
+        username = config.get('mail', 'username')
+        password = config.get('mail', 'password')
 
         logging.info('sending email to pm')
         send_mail(
             host=host,
+            username=username,
+            password=password,
             sender='NCIDOSEWebAdmin@mail.nih.gov',
             recipient=admin,
             subject='NCIDose STA Request',
@@ -131,6 +135,8 @@ def submit():
         logging.info('sending email to investigator')
         send_mail(
             host=host,
+            username=username,
+            password=password,
             sender='NCIDOSEWebAdmin@mail.nih.gov',
             recipient=data['email'],
             subject='NCIDose Software Transfer Agreement Form',
@@ -148,11 +154,13 @@ def submit():
 
     return 'success'
 
-def send_mail(host, sender, recipient, subject, contents, attachments=None):
+def send_mail(host, username, password, sender, recipient, subject, contents, attachments=None):
     """Sends an email to the provided recipient
 
     Arguments:
         - host {string} -- The smtp host
+        - username {string} -- User for smtp host
+        - password {string} -- Password for smtp user
         - sender {string} -- The sender of the email
         - recipient {string} -- The recipient of the email
         - subject {string} -- The email's subject
@@ -180,7 +188,10 @@ def send_mail(host, sender, recipient, subject, contents, attachments=None):
                 ))
 
     # send email
-    smtplib.SMTP(host).sendmail(sender, recipient, message.as_string())
+    smtp = smtplib.SMTP_SSL(host)
+    smtp.login(username, password)
+    smtp.sendmail(sender, recipient, message.as_string())
+    smtp.quit()
 
 if __name__ == '__main__':
 

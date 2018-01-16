@@ -6,7 +6,7 @@
 #		--url tcp://queue:9999 --name /queue --error /error
 
 # create hash for parameters
-declare -A parameters=( [host]= [admin]= )
+declare -A parameters=( [host]= [admin]= [username]= [password]= )
 valid=true
 
 # assign arguments to parameters
@@ -39,4 +39,8 @@ else
 	echo -e "\e[32mOptions:"
 	echo -e "\e[39m	--host\e[92m server.name"
 	echo -e "\e[39m	--admin\e[92m admin@server.name"
+	echo -e "\e[39m	--username\e[92m username"
+	echo -e "\e[39m	--password\e[92m password"
+
+
 fi
